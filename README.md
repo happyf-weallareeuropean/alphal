@@ -1,2 +1,6 @@
 # alphal
-learning alphabet in bring
+learning alphabet in live.
+project is at its very begining.
+
+
+
