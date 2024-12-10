@@ -2,7 +2,9 @@
 learn alphabet in live, smart direct of duoligo. 
 
 
-project is at its very begin, feel free add more feature or redesign direct to achieve we goal.  
+project is at its very begin.
+
+feel free do every thing to achieve we goal.  
 
 
 to do this (ver. direct), we might have three main mission with task: at-all / mean / memo
