@@ -4,7 +4,7 @@ learn alphabet in live, smart direct of duoligo.
 
 project is at its very begin.
 
-feel free do every thing to achieve we goal.  
+feel free do every thing to achieve we goal, i write down just let network effect.  
 
 
 to do this (ver. direct), we might have three main mission with task: at-all / mean / memo
