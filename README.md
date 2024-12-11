@@ -9,7 +9,7 @@ feel free do every thing to achieve we goal, i write down just let network effec
 
 to do this (ver. direct), we might have three main mission with task: at-all / mean / memo
 
-if we do it watch with [demo](git.com)**, almost done. let's talk about alignment. 
+if we do it this [alphal looks like](git.com)**, almost done. let's talk about alignment. 
 
 
 why excited : $, general efficient*, time limit, do had ppl do this, this are not complex task, leading software even do worst that push back. that's why alphal only focus on alphabet.
