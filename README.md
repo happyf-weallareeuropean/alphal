@@ -10,15 +10,19 @@ let's build this idea.
  --at-all 
  
    ---ios logic
+   ---macos 
    
    ---...
    
  --mean
  
-  ---...
+  ---image api
+  
+  ---design image in live
+  
+  ---image to meaning explain correctly
   
  --memo
 
- 
-  ...
+ ---...
 
