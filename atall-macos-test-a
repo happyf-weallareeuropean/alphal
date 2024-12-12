@@ -1,0 +1,156 @@
+//
+//  main.swift
+//  for mac nov.25 (atall)
+//
+//  Created by Felix on 12/12/24.
+//
+
+import Cocoa
+
+// MARK: - Overlay Window Controller
+class OverlayWindowController: NSWindowController {
+    convenience init(imageName: String, frame: NSRect) {
+        let window = NSWindow(contentRect: frame,
+                              styleMask: [.borderless],
+                              backing: .buffered,
+                              defer: false)
+        window.isOpaque = false
+        window.backgroundColor = NSColor.clear
+        window.level = .floating
+        window.hasShadow = false
+        window.ignoresMouseEvents = true // Allows clicks to pass through
+
+        let imageView = NSImageView(frame: frame)
+        if let image = NSImage(named: imageName) {
+            imageView.image = image
+            imageView.imageScaling = .scaleProportionallyUpOrDown
+        }
+        window.contentView = imageView
+        self.init(window: window)
+    }
+    
+    func showWindow(withDuration duration: TimeInterval) {
+        self.window?.makeKeyAndOrderFront(nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            self.window?.orderOut(nil)
+        }
+    }
+}
+
+// MARK: - Overlay Manager
+class OverlayManager {
+    static let shared = OverlayManager()
+    var overlayWindows: [OverlayWindowController] = []
+    
+    func showOverlay(imageName: String, at position: NSPoint, size: NSSize, duration: TimeInterval) {
+        let frame = NSRect(origin: position, size: size)
+        let overlay = OverlayWindowController(imageName: imageName, frame: frame)
+        overlayWindows.append(overlay)
+        overlay.showWindow(withDuration: duration)
+        
+        // Remove the overlay window after duration
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            if let index = self.overlayWindows.firstIndex(of: overlay) {
+                self.overlayWindows.remove(at: index)
+            }
+        }
+    }
+}
+
+// MARK: - App Controller for Closing Apps
+class AppController {
+    func closeApp(bundleIdentifier: String) {
+        let runningApps = NSWorkspace.shared.runningApplications
+        if let app = runningApps.first(where: { $0.bundleIdentifier == bundleIdentifier }) {
+            let success = app.terminate()
+            if !success {
+                app.forceTerminate()
+            }
+            print("Attempted to close app with bundle identifier: \(bundleIdentifier)")
+        } else {
+            print("App not running: \(bundleIdentifier)")
+        }
+    }
+}
+
+// MARK: - Main App Delegate
+class MainApp: NSObject, NSApplicationDelegate {
+    var window: NSWindow!
+    let appController = AppController()
+    var timer: Timer?
+    
+    func applicationDidFinishLaunching(_ notification: Notification) {
+        // Set up main window
+        window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 400, height: 300),
+                          styleMask: [.titled, .closable, .resizable],
+                          backing: .buffered,
+                          defer: false)
+        window.center()
+        window.title = "Overlay and App Controller"
+        window.makeKeyAndOrderFront(nil)
+
+        // Add buttons to close apps
+        let safariButton = createButton(title: "Close Safari", action: #selector(closeSafari))
+        let systemPrefsButton = createButton(title: "Close System Preferences", action: #selector(closeSystemPreferences))
+        let finderButton = createButton(title: "Close Finder", action: #selector(closeFinder))
+        
+        let stackView = NSStackView(views: [safariButton, systemPrefsButton, finderButton])
+        stackView.orientation = .vertical
+        stackView.alignment = .centerX
+        stackView.spacing = 10
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        window.contentView?.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.centerXAnchor.constraint(equalTo: window.contentView!.centerXAnchor),
+            stackView.centerYAnchor.constraint(equalTo: window.contentView!.centerYAnchor)
+        ])
+        
+        // Timer for random overlays
+        timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { _ in
+            self.showRandomOverlay()
+        }
+    }
+    
+    func applicationWillTerminate(_ notification: Notification) {
+        timer?.invalidate()
+        OverlayManager.shared.overlayWindows.removeAll()
+    }
+    
+    // MARK: - Overlay Logic
+    func showRandomOverlay() {
+        let screenFrame = NSScreen.main?.frame ?? NSRect(x: 0, y: 0, width: 800, height: 600)
+        let size = NSSize(width: 100, height: 100)
+        let position = NSPoint(x: CGFloat.random(in: 0...(screenFrame.width - size.width)),
+                               y: CGFloat.random(in: 0...(screenFrame.height - size.height)))
+        OverlayManager.shared.showOverlay(imageName: "Image1", at: position, size: size, duration: 5.0)
+    }
+    
+    // MARK: - Button Actions
+    @objc func closeSafari() {
+        appController.closeApp(bundleIdentifier: "com.apple.Safari")
+    }
+    
+    @objc func closeSystemPreferences() {
+        appController.closeApp(bundleIdentifier: "com.apple.systempreferences")
+    }
+    
+    @objc func closeFinder() {
+        appController.closeApp(bundleIdentifier: "com.apple.finder")
+    }
+    
+    // MARK: - Button Creation
+    private func createButton(title: String, action: Selector) -> NSButton {
+        let button = NSButton(title: title, target: self, action: action)
+        button.bezelStyle = .rounded
+        button.setFrameSize(NSSize(width: 200, height: 40))
+        return button
+    }
+}
+
+// MARK: - Launch the Application
+let app = NSApplication.shared
+let delegate = MainApp()
+app.delegate = delegate
+app.run()
+
