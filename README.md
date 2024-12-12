@@ -14,17 +14,3 @@ let's build this idea.
  -memo
   ...
 
-//, almost done. let's talk about alignment. 
-
-
-
-//feel free do every thing to achieve we goal, i write down just let network effect.  
-
-
-
-//*general efficient: brake culture done as logic of story. we know unify in one most efficient system like english n alphabet + //humam rights + imporve togher 
-//focus: on english n alphabet.
-
-
-//**(function of) look here is unifiy again, this i not had emotion reaction was like next decovery from  
-
