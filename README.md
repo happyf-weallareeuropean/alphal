@@ -7,17 +7,17 @@ let's build this idea.
  (ver. direct).
 -alphal 
 
- -at-all 
+ --at-all 
  
-   -ios logic
+   ---ios logic
    
-   ...
+   ---...
    
- -mean
+ --mean
  
-  ...
+  ---...
   
- -memo
+ --memo
 
  
   ...
