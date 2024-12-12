@@ -2,7 +2,7 @@
 learn alphabet in live, smart direct of duoligo. 
 
 
-let's build this idea.
+let's build idea.
 
  (ver. direct).
 -alphal 
